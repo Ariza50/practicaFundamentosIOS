@@ -13,9 +13,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
+    var lib: Library?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //  Creamos la libreria pasándole la URL al JSON que tiene la información, aunque de momento trabajo con el JSON descargado.
+        lib = Library(JSON: URL(fileURLWithPath: "https://t.co/K9ziV0z3SJ"))
+        
+        //  Creamos la tabla que representa nuestro library.
+        let libtvc = LibraryTableView(library: lib!)
+        
+        //  Si estamos corriendo en un iPad...
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad) {
+            //  Creamos el viewController que representa nuestro libro.
+            //  Pero hay que pasarle un libro así que vamos a coger el primero que nos aporta lib
+            let tag = lib?.tags()[0]
+            let bk = lib?.books(forTagName: (tag?.nameTag)!, at: 0)
+            //  Inicializamos el ViewController con el primer libro del primer tag disponible
+            let bookvc = BookViewController.init(book: bk!)
+            //  Lo metemos dentro de un Navigation viewController para poder hacerle un push
+            let NavBookvc = UINavigationController.init(rootViewController: bookvc)
+            //  Ahora creamos el splitVC que los va a contener a los dos VC's
+            let splitVC = UISplitViewController()
+            //  Metemos los controladores
+            splitVC.viewControllers = [libtvc, NavBookvc]
+            //  Se lo asignamos a la window principal
+            window?.rootViewController = splitVC
+        }
+        //  Si estamos corriendo en un iPhone...
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.phone) {
+            //  Lo metemos dentro de un Navigation viewController para poder hacerle un push
+            let NavLibtvc = UINavigationController.init(rootViewController: libtvc)
+            //  Se lo asignamos a la window principal
+            window?.rootViewController = NavLibtvc
+        }
+        
+        window?.makeKeyAndVisible()
+        
+        
         return true
     }
 
