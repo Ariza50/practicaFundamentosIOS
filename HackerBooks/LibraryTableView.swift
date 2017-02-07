@@ -122,15 +122,26 @@ class LibraryTableView: UITableViewController {
     func actualizarFavoritos(Notif: Notification){
         //  Así que cojo el nuevo Book.
         if let bk = Notif.userInfo?["Libro"] as? Book {
-            //  Lo guardo en mi modelo book
+            //  Si el tag favoritos ya existe en el libro, es que quiero quitárselo
             if (bk.tags.contains(Tag(nameTag: "Favoritos"))){
                 //  Quito del multiDic el libro con el tag 'Favoritos'
                 bk.tags.remove(Tag(nameTag: "Favoritos"))
+                //  Y luego quito el par del Multidic
                 library.library.remove(value: bk, fromKey: Tag(nameTag: "Favoritos"))
-            }else{
+            }else{//  Si no existe, entonces lo añado a favoritos
                 //  Anado al multiDic el libro con su nuevo Tag
                 bk.tags.insert(Tag(nameTag: "Favoritos"))
+                //  Y luego añado el par al Multidic
                 library.library.insert(value: bk, forKey: Tag(nameTag: "Favoritos"))
+            }
+            //  Aprovecho para actualizar los favoritos de la memoria
+            let defaults = UserDefaults.standard
+            var arrBk = Array<String>()
+            if let arrayFavoritos = library.books(forTagName: "Favoritos") {
+                for bk in arrayFavoritos {
+                    arrBk.append(bk.title)
+                }
+                defaults.set(arrBk, forKey: "Favoritos")
             }
             //  Si hemos llegado aquí es que se ha actualizado alguna Portada.
             self.tableView.reloadData()

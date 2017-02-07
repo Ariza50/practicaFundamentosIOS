@@ -45,7 +45,7 @@ class Book {
             
             }
         */
-        //  Notifico a quien le interese que libraries ha cambiado
+        //  Notifico a quien le interese que libraries ha cambiado el estado de los favoritos
         let notif = Notification.Name(rawValue: "Favoritos")
         //  Lo envio
         enviarNotificacion(nombre: notif)

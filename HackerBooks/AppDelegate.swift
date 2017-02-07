@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var lib: Library?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
         //  Creamos la libreria pasándole la URL al JSON que tiene la información, aunque de momento trabajo con el JSON descargado.
         lib = Library(JSON: URL(fileURLWithPath: "https://t.co/K9ziV0z3SJ"))
@@ -75,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
     }
 
 
